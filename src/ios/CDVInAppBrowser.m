@@ -1129,6 +1129,7 @@ self.shareButton.width = 38.000;
     [bgToolbar setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
     [self.view addSubview:bgToolbar];
 
+    _bgToolbar = bgToolbar;
     [super viewDidLoad];
 }
 
