@@ -1136,7 +1136,7 @@ self.shareButton.width = 38.000;
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     CGRect frame = [UIApplication sharedApplication].statusBarFrame;
-    [bgToolbar setFrame:CGRectMake(frame.origin.x, frame.origin.y, size.width, frame.size.height)];
+    [_bgToolbar setFrame:CGRectMake(frame.origin.x, frame.origin.y, size.width, frame.size.height)];
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
 }
 
