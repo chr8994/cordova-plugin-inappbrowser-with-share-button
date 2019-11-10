@@ -112,7 +112,10 @@
 
 @end
 
-@interface CDVInAppBrowserWithShareButtonNavigationController : UINavigationController
+@interface CDVInAppBrowserWithShareButtonNavigationController : UINavigationController { 
+    @private
+    UIToolbar *_bgToolbar;
+}
 
 @property (nonatomic, weak) id <CDVScreenOrientationDelegate> orientationDelegate;
 
