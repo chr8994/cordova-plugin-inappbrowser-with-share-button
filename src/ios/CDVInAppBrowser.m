@@ -1132,6 +1132,13 @@ self.shareButton.width = 38.000;
     [super viewDidLoad];
 }
 
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    CGRect frame = [UIApplication sharedApplication].statusBarFrame;
+    [bgToolbar setFrame:CGRectMake(frame.origin.x, frame.origin.y, size.width, frame.size.height)];
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+}
+
 - (CGRect) invertFrameIfNeeded:(CGRect)rect {
     // We need to invert since on iOS 7 frames are always in Portrait context
     if (!IsAtLeastiOSVersion(@"8.0")) {
