@@ -30,6 +30,7 @@
 @class CDVInAppBrowserWithShareButtonViewController;
 
 @interface CDVInAppBrowserWithShareButton : CDVPlugin {
+    UIWindow * tmpWindow;
 }
 
 @property (nonatomic, retain) CDVInAppBrowserWithShareButtonViewController* inAppBrowserWithShareButtonViewController;
