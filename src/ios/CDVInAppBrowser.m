@@ -64,6 +64,7 @@
         NSLog(@"IAB.close() called but it was already closed.");
         return;
     }
+    
     // Things are cleaned up in browserExit.
     [self.inAppBrowserWithShareButtonViewController close];
 }
@@ -239,20 +240,28 @@
     // Run later to avoid the "took a long time" log message.
     dispatch_async(dispatch_get_main_queue(), ^{
         if (weakSelf.inAppBrowserWithShareButtonViewController != nil) {
-            CGRect frame = [[UIScreen mainScreen] bounds];
-            UIWindow *tmpWindow = [[UIWindow alloc] initWithFrame:frame];
-            UIViewController *tmpController = [[UIViewController alloc] init];
-            [tmpWindow setRootViewController:tmpController];
-            [tmpWindow setWindowLevel:UIWindowLevelNormal];
+             __strong __typeof(weakSelf) strongSelf = weakSelf;
+             if (!strongSelf->tmpWindow) {
+                 CGRect frame = [[UIScreen mainScreen] bounds];
+                 strongSelf->tmpWindow = [[UIWindow alloc] initWithFrame:frame];
+             }
+             UIViewController *tmpController = [[UIViewController alloc] init];
 
-            [tmpWindow makeKeyAndVisible];
-            [tmpController presentViewController:nav animated:YES completion:nil];
+             [strongSelf->tmpWindow setRootViewController:tmpController];
+             [strongSelf->tmpWindow setWindowLevel:UIWindowLevelNormal];
+
+             [self->tmpWindow makeKeyAndVisible];
+             [tmpController presentViewController:nav animated:YES completion:nil];
         }
     });
 }
 
 - (void)hide:(CDVInvokedUrlCommand*)command
 {
+    // Set tmpWindow to hidden to make main webview responsive to touch again
+    // https://stackoverflow.com/questions/4544489/how-to-remove-a-uiwindow
+    self->tmpWindow.hidden = YES;
+    
     if (self.inAppBrowserWithShareButtonViewController == nil) {
         NSLog(@"Tried to hide IAB after it was closed.");
         return;
@@ -496,6 +505,10 @@
     // Don't recycle the ViewController since it may be consuming a lot of memory.
     // Also - this is required for the PDF/User-Agent bug work-around.
     self.inAppBrowserWithShareButtonViewController = nil;
+    
+    // Set tmpWindow to hidden to make main webview responsive to touch again
+    // Based on https://stackoverflow.com/questions/4544489/how-to-remove-a-uiwindow
+    self->tmpWindow.hidden = YES;
 
     if (IsAtLeastiOSVersion(@"7.0")) {
         if (_previousStatusBarStyle != -1) {
